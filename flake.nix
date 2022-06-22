@@ -17,6 +17,7 @@
         useAndroidPrebuilt = false;
         libc = "bionic";
         useLLVM = true;
+        isStatic = true;
       };
 
       xNixpkgsPrebuilt = import inputs.nixpkgs {
@@ -28,9 +29,12 @@
         system = "x86_64-linux";
         crossSystem = crossSystemAndroidNonPrebuilt;
       };
+      ss = xNixpkgsNonPrebuilt.pkgsStatic.stdenvAdapters.makeStaticBinaries xNixpkgsNonPrebuilt.stdenv;
 
       xHelloPrebuilt = xNixpkgsPrebuilt.callPackage ./hello.nix {};
-      xHelloNonPrebuilt = xNixpkgsNonPrebuilt.callPackage ./hello.nix {};
+      xHelloNonPrebuilt = xNixpkgsNonPrebuilt.callPackage ./hello.nix {
+        stdenv = ss;
+      };
 
     in {
       packages.x86_64-linux = {

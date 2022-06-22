@@ -6,7 +6,7 @@ stdenv.mkDerivation {
 
   src = ./src;
 
-  buildPhase = "make hello";
+  buildPhase = "make CFLAGS=-static hello";
 
   installPhase = ''
     install -D -m 0755 hello $out
