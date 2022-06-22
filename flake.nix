@@ -35,10 +35,25 @@
         stdenv = ss;
       };
 
+      nonXNixpkgsNonPrebuilt = import inputs.nixpkgs {
+        system = "aarch64-linux";
+        crossSystem = crossSystemAndroidNonPrebuilt;
+      };
+      nonXHelloNonPrebuilt = xNixpkgsNonPrebuilt.callPackage ./hello.nix {
+        stdenv =
+            nonXNixpkgsNonPrebuilt.pkgsStatic.stdenvAdapters.makeStaticBinaries
+            nonXNixpkgsNonPrebuilt.stdenv;
+      };
+
     in {
       packages.x86_64-linux = {
         inherit xHelloNonPrebuilt xHelloPrebuilt;
         default = xHelloNonPrebuilt;
+      };
+
+      packages.aarch64-linux = {
+        inherit nonXHelloNonPrebuilt;
+        default = nonXHelloNonPrebuilt;
       };
     };
 }
