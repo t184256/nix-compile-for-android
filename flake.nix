@@ -12,8 +12,7 @@
 
       crossSystemAndroidNonPrebuilt = {
         config = "aarch64-unknown-linux-android";
-        ndkVer = "21";
-        sdkVer = "30";
+        sdkVer = "32";
         useAndroidPrebuilt = false;
         libc = "bionic";
         useLLVM = true;
